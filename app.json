@@ -3,36 +3,69 @@
     "name": "TaskManager",
     "slug": "TaskManager",
     "version": "1.0.0",
-
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "scheme": "taskmanager",
+    "updates": {
+      "url": "https://u.expo.dev/01fc8b55-0089-4463-88a6-89536fe7e3c7"
     },
-
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "apiUrl": "http://64.227.153.32:8000",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "01fc8b55-0089-4463-88a6-89536fe7e3c7"
+      }
+    },
+    "newArchEnabled": true,
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
     "experiments": {
       "tsconfigPaths": true
     },
-
-    "plugins": [],
-
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
+      ]
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
-      }
-    }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.mishab_hassoun.TaskManager"
+    },
+    "owner": "mishab_hassoun"
   }
 }
