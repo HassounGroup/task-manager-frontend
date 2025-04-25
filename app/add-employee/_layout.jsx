@@ -1,11 +1,10 @@
-import { useState, useContext, useEffect } from "react";
-import { View, Text, TextInput, Alert, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { AuthContext } from "../../contexts/authContext";
-import { Feather } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
+import { AuthContext } from "../../contexts/authContext";
 
 export default function AddEmployeeScreen() {
     const Creds = useCreds();
