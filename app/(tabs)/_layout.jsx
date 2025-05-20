@@ -44,7 +44,7 @@ export default function TabLayout() {
 
   // Render top bar with logo and user details
   const renderHeader = () => (
-    <View className="flex-row justify-between items-center px-4 py-4 bg-white/60 drop-shadow-md">
+    <View className="flex-row justify-between items-center px-4 py-4 bg-[#f3f4f6] drop-shadow-md border-b-[.3px] border-gray-300">
       <TouchableOpacity
         onPress={() => router.push("/news")}
       >
@@ -84,7 +84,7 @@ export default function TabLayout() {
         // initialRouteName="tasks"
         screenOptions={{
           tabBarActiveTintColor: "#e6560e",
-          tabBarStyle: { backgroundColor: "#f8f9fa", height: 60 },
+          tabBarStyle: { backgroundColor: "#f3f4f6", height: 60 },
           headerShown: false,
 
         }}

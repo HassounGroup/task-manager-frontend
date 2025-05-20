@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,15 +9,18 @@ import {
   LayoutAnimation,
   UIManager,
   Platform,
-} from "react-native";
-import RNPickerSelect from "react-native-picker-select";
-import { useAuth } from "../../contexts/authContext";
-import { Feather, Entypo } from "@expo/vector-icons";
-import { useCreds } from "creds";
-import Icon from "react-native-vector-icons/Ionicons";
-import { useRouter } from "expo-router";
+  RefreshControl,
+} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
+import { useAuth } from '../../contexts/authContext';
+import { Feather, Entypo } from '@expo/vector-icons';
+import { useCreds } from 'creds';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
-if (Platform.OS === "android") {
+if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -30,6 +33,21 @@ const MyTasksScreen = () => {
   const [editMode, setEditMode] = useState({});
   const [expanded, setExpanded] = useState({});
   const [updatedTasks, setUpdatedTasks] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [openStatus, setOpenStatus] = useState(false);
+  const [statusItems, setStatusItems] = useState([
+    { label: 'Not Started', value: 'not started' },
+    { label: 'In Progress', value: 'in progress' },
+    { label: 'Completed', value: 'completed' },
+  ]);
+  const [statusValues, setStatusValues] = useState({});
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTasks();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     fetchTasks();
@@ -37,20 +55,18 @@ const MyTasksScreen = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(
-        `${Creds.BackendUrl}/api/tasks/assigned/${userProfile._id}`,
-        {
-          headers: { Authorization: `Bearer ${userToken}` },
-        }
-      );
+      const response = await fetch(`${Creds.BackendUrl}/api/tasks/assigned/${userProfile._id}`, {
+        headers: { Authorization: `Bearer ${userToken}` },
+      });
       const data = await response.json();
       if (response.ok) {
         setTasks(data);
       } else {
-        console.error("Failed to fetch tasks:", data.message);
+        console.error('Failed to fetch tasks:', data.message);
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+      // console.error("Fetch error:", error);
+      router.push('/signin');
     }
   };
 
@@ -68,49 +84,43 @@ const MyTasksScreen = () => {
     if (!updatedTasks[taskId]) return toggleEdit(taskId);
 
     try {
-      const response = await fetch(
-        `${Creds.BackendUrl}/api/tasks/${taskId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userToken}`,
-          },
-          body: JSON.stringify(updatedTasks[taskId]),
-        }
-      );
+      const response = await fetch(`${Creds.BackendUrl}/api/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify(updatedTasks[taskId]),
+      });
       if (response.ok) {
         fetchTasks();
         toggleEdit(taskId);
       } else {
-        console.error("Failed to update task.");
+        console.error('Failed to update task.');
       }
     } catch (error) {
-      console.error("Update error:", error);
+      console.error('Update error:', error);
     }
   };
 
   const requestTaskApproval = async (taskId) => {
     try {
-      const res = await fetch(
-        `${Creds.BackendUrl}/api/tasks/${taskId}/request-approval`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userToken}`,
-          },
-          body: JSON.stringify({ requestStatus: "requested" }),
-        }
-      );
+      const res = await fetch(`${Creds.BackendUrl}/api/tasks/${taskId}/request-approval`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ requestStatus: 'requested' }),
+      });
       const data = await res.json();
       if (res.ok) {
         fetchTasks();
       } else {
-        console.error("Failed to request approval:", data);
+        console.error('Failed to request approval:', data);
       }
     } catch (error) {
-      console.error("Error requesting approval:", error);
+      console.error('Error requesting approval:', error);
     }
   };
 
@@ -123,14 +133,14 @@ const MyTasksScreen = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "not started":
-        return "text-gray-500";
-      case "in progress":
-        return "text-yellow-500";
-      case "completed":
-        return "text-green-500";
+      case 'not started':
+        return 'text-gray-500';
+      case 'in progress':
+        return 'text-yellow-500';
+      case 'completed':
+        return 'text-green-500';
       default:
-        return "text-black";
+        return 'text-black';
     }
   };
 
@@ -143,122 +153,129 @@ const MyTasksScreen = () => {
   };
 
   const renderTask = (item) => {
-    const isApproved = item.requestStatus === "approved";
-    const isDeclined = item.requestStatus === "declined";
+    const isApproved = item.requestStatus === 'approved';
+    const isDeclined = item.requestStatus === 'declined';
     const isExpanded = expanded[item._id];
 
     return (
-      <View
-        key={item._id}
-        className="bg-white mb-1 rounded-lg border border-gray-300"
-      >
+      <View key={item._id} className="mb-1 rounded-lg border border-gray-300 bg-white">
         {/* Top: Compact Header */}
         <TouchableOpacity
           onPress={() => toggleExpand(item._id)}
-          className="p-3 flex-row justify-between items-center"
-        >
+          className="flex-row items-center justify-between p-3">
           <View>
             <Text className="text-lg font-bold text-gray-800">{item.title}</Text>
             <Text className="text-sm text-gray-600">
-              Assigned: {new Date(item.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', hour12: true })}
+              Assigned:{' '}
+              {new Date(item.createdAt).toLocaleString('en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                hour12: true,
+              })}
             </Text>
           </View>
-          {item.status === "not started" ? <View className="mr-20 mb-6 bg-orange-500 px-1 py-0 rounded-full float-end border-[2px] border-orange-200">
-            <Text className="text-white">New</Text>
-          </View> : null}
-          <Entypo
-            name={isExpanded ? "chevron-up" : "chevron-down"}
-            size={22}
-            color="gray"
-          />
+          {item.status === 'not started' ? (
+            <View className="float-end mb-6 mr-20 rounded-full border-[2px] border-orange-200 bg-orange-500 px-1 py-0">
+              <Text className="text-white">New</Text>
+            </View>
+          ) : null}
+          <Entypo name={isExpanded ? 'chevron-up' : 'chevron-down'} size={22} color="gray" />
         </TouchableOpacity>
 
         {/* Expanded Details */}
         {isExpanded && (
-          <View className="px-3 pb-3 pt-1 border-t border-gray-200 bg-gray-50 rounded-b-lg">
-            <Text className="text-gray-700 mb-1">{item.description}</Text>
-            <Text className="text-sm text-gray-500">
-              Assigned by: {item.assignedBy}
-            </Text>
-            <Text className="text-sm text-red-500 font-medium">
-              Deadline: {new Date(item.deadline).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', hour12: true })}
+          <View className="rounded-b-lg border-t border-gray-200 bg-gray-50 px-3 pb-3 pt-1">
+            <Text className="mb-1 text-gray-700">{item.description}</Text>
+            <Text className="text-sm text-gray-500">Assigned by: {item.assignedBy}</Text>
+            <Text className="text-sm font-medium text-red-500">
+              Deadline:{' '}
+              {new Date(item.deadline).toLocaleString('en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                hour12: true,
+              })}
             </Text>
 
-            <View className="flex-row items-center justify-between mt-2">
-              <Text className="font-semibold text-gray-700">My status:</Text>
+            <View className="mt-2 mb-2">
+              <Text className="mb-1 font-semibold text-gray-700">My status:</Text>
+
               {editMode[item._id] ? (
-                <View
-                  className={`${getStatusColor(item.status)} bg-gray-200 w-[70%] rounded-lg font-bold`}
-                >
-                  <RNPickerSelect
-                    onValueChange={(value) => handleChange(item._id, "status", value)}
-                    items={[
-                      { label: "Not Started", value: "not started" },
-                      { label: "In Progress", value: "in progress" },
-                      { label: "Completed", value: "completed" },
-                    ]}
-                    value={updatedTasks[item._id]?.status || item.status}
-                    style={{
-                      inputAndroid: {
-                        fontSize: 14,
-                        fontWeight: "bold",
-                      },
-                    }}
-                  />
-                </View>
+                <DropDownPicker
+                  open={openStatus}
+                  value={statusValues[item._id] || item.status}
+                  items={statusItems}
+                  listMode="SCROLLVIEW"
+                  setOpen={() => {
+                    // Close other dropdowns if you're rendering in a list
+                    setOpenStatus((prev) => !prev);
+                  }}
+                  setValue={(callback) => {
+                    const value = callback(statusValues[item._id] || item.status);
+                    setStatusValues((prev) => ({ ...prev, [item._id]: value }));
+                    handleChange(item._id, 'status', value); // your handler
+                  }}
+                  setItems={setStatusItems}
+                  style={{
+                    backgroundColor: '#E5E7EB', // Tailwind bg-gray-200
+                    borderColor: 'transparent',
+                    height: 40,
+                  }}
+                  containerStyle={{ zIndex: 1000 }} // Important for dropdown stacking
+                  dropDownContainerStyle={{
+                    backgroundColor: '#E5E7EB',
+                    borderColor: 'transparent',
+                    zIndex: 999,
+                  }}
+                />
               ) : (
-                <Text className={`${getStatusColor(item.status)} font-semibold text-lg`}>
+                <Text className={`${getStatusColor(item.status)} text-lg font-semibold`}>
                   {item.status}
                 </Text>
               )}
             </View>
 
-            <Text className="font-semibold text-gray-700 mt-2">Notes:</Text>
+            <Text className="mt-2 font-semibold text-gray-700">Notes:</Text>
             {editMode[item._id] ? (
               <TextInput
-                className="bg-gray-200 p-2 rounded-lg border border-gray-300 text-gray-700"
+                className="rounded-lg border border-gray-300 bg-gray-200 p-2 text-gray-700"
                 placeholder="Add notes..."
                 value={updatedTasks[item._id]?.notes || item.notes}
-                onChangeText={(text) => handleChange(item._id, "notes", text)}
+                onChangeText={(text) => handleChange(item._id, 'notes', text)}
                 multiline={true}
               />
             ) : (
-              <Text className="text-gray-600 mt-1 bg-gray-100 p-1 rounded-md">
-                {item.notes || "No notes added"}
+              <Text className="mt-1 rounded-md bg-gray-100 p-1 text-gray-600">
+                {item.notes || 'No notes added'}
               </Text>
             )}
 
             {/* Request Status Section */}
             <View className="mt-3">
-              {item.requestStatus === "requested" && (
-                <Text className="text-orange-500 font-medium text-center">
+              {item.requestStatus === 'requested' && (
+                <Text className="text-center font-medium text-orange-500">
                   🟠 Requested for approval
                 </Text>
               )}
-              {item.requestStatus === "approved" && (
-                <Text className="text-green-600 font-medium text-center">
-                  ✅ Task Approved
-                </Text>
+              {item.requestStatus === 'approved' && (
+                <Text className="text-center font-medium text-green-600">✅ Task Approved</Text>
               )}
-              {item.requestStatus === "declined" && (
-                <Text className="text-red-600 font-medium text-center">
-                  ❌ Task Declined
-                </Text>
+              {item.requestStatus === 'declined' && (
+                <Text className="text-center font-medium text-red-600">❌ Task Declined</Text>
               )}
 
               {isApproved && (
                 <>
-                  <Text className="text-green-600 font-semibold mt-2">
+                  <Text className="mt-2 font-semibold text-green-600">
                     Admin Review: {item.approveReview}
                   </Text>
-                  <View className="flex-row items-center gap-3 mb-2">
-                    <Text className="text-gray-700 font-semibold">Rating:</Text>
+                  <View className="mb-2 flex-row items-center gap-3">
+                    <Text className="font-semibold text-gray-700">Rating:</Text>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Text
                         key={star}
-                        className={`text-2xl ${item?.rating >= star ? "text-yellow-400" : "text-gray-300"
-                          }`}
-                      >
+                        className={`text-2xl ${
+                          item?.rating >= star ? 'text-yellow-400' : 'text-gray-300'
+                        }`}>
                         ★
                       </Text>
                     ))}
@@ -270,49 +287,42 @@ const MyTasksScreen = () => {
                 <>
                   {isDeclined && (
                     <>
-                      <Text className="text-red-600 font-semibold mt-2">
+                      <Text className="mt-2 font-semibold text-red-600">
                         Decline Reason: {item.declineReason}
                       </Text>
                     </>
                   )}
 
                   <TouchableOpacity
-                    className="bg-orange-600 mt-3 p-2 rounded-md flex-row justify-center items-center gap-2"
+                    className="mt-3 flex-row items-center justify-center gap-2 rounded-md bg-orange-600 p-2"
                     onPress={() =>
                       editMode[item._id] ? saveTask(item._id) : toggleEdit(item._id)
-                    }
-                  >
-                    <Feather
-                      name={editMode[item._id] ? "check" : "edit"}
-                      size={18}
-                      color="white"
-                    />
-                    <Text className="text-white font-semibold">
-                      {editMode[item._id] ? "Save" : "Edit"}
+                    }>
+                    <Feather name={editMode[item._id] ? 'check' : 'edit'} size={18} color="white" />
+                    <Text className="font-semibold text-white">
+                      {editMode[item._id] ? 'Save' : 'Edit'}
                     </Text>
                   </TouchableOpacity>
 
                   {!editMode[item._id] &&
-                    item.status === "completed" &&
-                    item.requestStatus === "none" && (
+                    item.status === 'completed' &&
+                    item.requestStatus === 'none' && (
                       <TouchableOpacity
-                        className="bg-orange-600 mt-2 p-2 rounded-md"
-                        onPress={() => requestTaskApproval(item._id)}
-                      >
-                        <Text className="text-white text-center font-semibold">
+                        className="mt-2 rounded-md bg-orange-600 p-2"
+                        onPress={() => requestTaskApproval(item._id)}>
+                        <Text className="text-center font-semibold text-white">
                           Submit for Approval
                         </Text>
                       </TouchableOpacity>
                     )}
 
                   {!editMode[item._id] &&
-                    item.status === "completed" &&
-                    item.requestStatus === "declined" && (
+                    item.status === 'completed' &&
+                    item.requestStatus === 'declined' && (
                       <TouchableOpacity
-                        className="bg-orange-600 mt-2 p-2 rounded-md"
-                        onPress={() => requestTaskApproval(item._id)}
-                      >
-                        <Text className="text-white text-center font-semibold">
+                        className="mt-2 rounded-md bg-orange-600 p-2"
+                        onPress={() => requestTaskApproval(item._id)}>
+                        <Text className="text-center font-semibold text-white">
                           ReSubmitt for Approval
                         </Text>
                       </TouchableOpacity>
@@ -326,34 +336,30 @@ const MyTasksScreen = () => {
     );
   };
 
-  const ongoingTasks = tasks.filter(
-    (task) => task.requestStatus !== "approved"
-  );
-  const completedTasks = tasks.filter(
-    (task) => task.requestStatus === "approved"
-  );
+  const ongoingTasks = tasks.filter((task) => task.requestStatus !== 'approved');
+  const completedTasks = tasks.filter((task) => task.requestStatus === 'approved');
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
-      <ScrollView className="flex-1 bg-gray-100 p-3">
+    <View style={{ flex: 1, backgroundColor: '#f8f8f8' }}>
+      <ScrollView
+        className="flex-1 bg-gray-50 p-3"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {tasks.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-10 text-lg">
+          <Text className="mt-10 text-center text-lg text-gray-500">
             You don't have any assigned tasks!
           </Text>
         ) : (
           <>
             {ongoingTasks.length > 0 && (
               <View>
-                <Text className="text-xl font-bold text-gray-800 mb-2">Ongoing Tasks</Text>
+                <Text className="mb-2 text-xl font-bold text-gray-800">Ongoing Tasks</Text>
                 {ongoingTasks.map(renderTask)}
               </View>
             )}
 
             {completedTasks.length > 0 && (
-              <View className="mt-6 mb-5">
-                <Text className="text-xl font-bold text-green-700 mb-2">
-                  Completed Tasks
-                </Text>
+              <View className="mb-5 mt-6">
+                <Text className="mb-2 text-xl font-bold text-green-700">Completed Tasks</Text>
                 {completedTasks.map((task) => (
                   <View key={task._id}>{renderTask(task)}</View>
                 ))}
@@ -363,10 +369,10 @@ const MyTasksScreen = () => {
         )}
       </ScrollView>
       {/* Floating Button to Create Post (Admin Only) */}
-      {userProfile?.role === "admin" && (
-        <TouchableOpacity className="absolute bottom-5 right-5 bg-orange-600 rounded-full p-4 elevation-md"
-          onPress={() => router.push("/add-task")}
-        >
+      {userProfile?.role === 'admin' && (
+        <TouchableOpacity
+          className="elevation-md absolute bottom-5 right-5 rounded-full bg-orange-600 p-4"
+          onPress={() => router.push('/add-task')}>
           <Icon name="add" size={30} color="#fff" />
         </TouchableOpacity>
       )}

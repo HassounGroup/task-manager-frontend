@@ -52,7 +52,7 @@ export default function ChangePassword() {
     <View style={styles.container}>
       {/* Back Arrow */}
       <TouchableOpacity onPress={() => router.back()} style={styles.backArrow}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        <Ionicons name="arrow-back" size={25} color="black" />
       </TouchableOpacity>
 
       <Text style={styles.title}>Change Password</Text>
@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#f3f4f6",
   },
   backArrow: {
     position: "absolute",
-    top: 40,
-    left: 20,
+    top: 20,
+    left: 10,
     padding: 10,
   },
   title: {

@@ -13,7 +13,6 @@ import {
 
 // Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
   const router = useRouter();
   const [isAppReady, setIsAppReady] = useState(false);

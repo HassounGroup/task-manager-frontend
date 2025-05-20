@@ -73,7 +73,7 @@ export default function CreatePostScreen({ navigation }) {
     };
 
     return (
-        <View className="flex-1 p-4 bg-gray-100">
+        <View className="flex-1 p-4 bg-[#f3f4f6]">
             <TouchableOpacity
                 onPress={() => router.back()}
                 className="absolute top-10 left-4 p-0 rounded-full z-10"
@@ -81,23 +81,23 @@ export default function CreatePostScreen({ navigation }) {
                 <Ionicons name="arrow-back" size={27} color="black" />
             </TouchableOpacity>
 
-            <Text className="text-2xl font-bold text-[#FF5733] mb-4 mt-20">Create New Post</Text>
+            <Text className="text-2xl font-bold text-black mb-4 mt-20">Create New Post</Text>
 
             <TextInput
                 placeholder="Title"
-                className="border border-gray-300 p-3 rounded-lg mb-4 text-base"
+                className="border border-gray-300 p-3 rounded-lg mb-4 text-base h-14"
                 value={title}
                 onChangeText={setTitle}
             />
             <TextInput
                 placeholder="Description"
                 multiline
-                className="border border-gray-300 p-3 rounded-lg mb-4 text-base"
+                className="border border-gray-300 p-3 rounded-lg mb-4 text-base h-14"
                 value={description}
                 onChangeText={setDescription}
             />
 
-            <TouchableOpacity onPress={handlePickMedia} className="bg-[#FF5733] py-3 rounded-lg mb-4 justify-center items-center">
+            <TouchableOpacity onPress={handlePickMedia} className="bg-[#e6560e] py-3 rounded-lg mb-4 justify-center items-center h-14">
                 <Text className="text-white font-bold text-lg">Pick Media</Text>
             </TouchableOpacity>
 
@@ -123,7 +123,7 @@ export default function CreatePostScreen({ navigation }) {
             <TouchableOpacity
                 onPress={handleSubmit}
                 disabled={isUploading}
-                className={`bg-[#FF5733] py-3 rounded-lg justify-center items-center ${isUploading ? "bg-gray-300" : ""}`}
+                className={`bg-[#e6560e] py-3 rounded-lg justify-center items-center h-14 ${isUploading ? "bg-gray-300" : ""}`}
             >
                 <Text className="text-white font-bold text-lg">
                     {isUploading ? "Uploading..." : "Create Post"}

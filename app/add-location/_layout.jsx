@@ -16,7 +16,7 @@ export default function AddLocationScreen() {
         }
 
         // Make an API call to save the category in the database
-        fetch(`http://192.168.1.220:8000/api/locations`, {
+        fetch(`${Creds.BackendUrl}/api/locations`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -47,8 +47,8 @@ export default function AddLocationScreen() {
 
     return (
         <View className="flex-1 justify-center items-center p-5">
-            <TouchableOpacity onPress={() => router.back()} className="absolute top-10 left-5 p-2">
-                <Ionicons name="arrow-back" size={24} color="black" />
+            <TouchableOpacity onPress={() => router.back()} className="absolute top-5 left-4 p-2">
+                <Ionicons name="arrow-back" size={25} color="black" />
             </TouchableOpacity>
             <Text className="text-3xl font-bold text-orange-600">Add Location</Text>
             <Text className="text-sm text-gray-500 mb-12">

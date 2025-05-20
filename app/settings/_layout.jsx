@@ -31,7 +31,7 @@ export default function SettingsScreen() {
       {/* Header */}
       <TouchableOpacity
         onPress={() => router.back()}
-        className="absolute top-10 left-4 p-0 rounded-full"
+        className="absolute -top-10 left-5 p-0 rounded-full"
       >
         <Ionicons name="arrow-back" size={25} color="black" />
       </TouchableOpacity>
@@ -157,7 +157,7 @@ export default function SettingsScreen() {
       <View className="flex-col justify-center items-center mt-20">
       <Text className="text-gray-500 text-[0.7rem]">Hassoun Group ©2025</Text>
       <Text className="text-gray-500 text-[0.8rem]">Task manager application version 1.0</Text>
-      <Text className="text-gray-500 text-[0.6rem]">Developed by mohd mishab with ♥</Text>
+      {/* <Text className="text-gray-500 text-[0.6rem]">Developed by mohd mishab with ♥</Text> */}
       </View>
       
     </View>

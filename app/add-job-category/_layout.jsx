@@ -47,8 +47,8 @@ export default function AddJobCategoryScreen() {
 
     return (
         <View className="flex-1 justify-center items-center p-5">
-            <TouchableOpacity onPress={() => router.back()} className="absolute top-10 left-5 p-2">
-                <Ionicons name="arrow-back" size={24} color="black" />
+            <TouchableOpacity onPress={() => router.back()} className="absolute top-5 left-4 p-2">
+                <Ionicons name="arrow-back" size={25} color="black" />
             </TouchableOpacity>
             <Text className="text-2xl font-bold text-orange-600">Add Job Category</Text>
             <Text className="text-sm text-gray-500 mb-12">

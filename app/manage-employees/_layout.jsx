@@ -93,7 +93,7 @@ export default function ManageEmployeesScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-white">
+      <View className="flex-1 justify-center items-center bg-[#f3f4f6]">
         <ActivityIndicator size="large" color="#e6560e" />
         <Text className="mt-2 text-lg text-gray-500">Loading employees...</Text>
       </View>
@@ -102,8 +102,8 @@ export default function ManageEmployeesScreen() {
 
   return (
     <View className="flex-1 p-4 bg-gray-100">
-      <TouchableOpacity onPress={() => router.back()} className="absolute top-5 left-4">
-        <Ionicons name="arrow-back" size={27} color="black" />
+      <TouchableOpacity onPress={() => router.back()} className="absolute top-5 left-5">
+        <Ionicons name="arrow-back" size={25} color="black" />
       </TouchableOpacity>
 
       <Text className="text-2xl font-bold text-gray-800 mb-2 mt-14 text-center">Manage Employees</Text>

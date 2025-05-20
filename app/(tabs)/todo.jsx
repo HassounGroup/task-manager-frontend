@@ -125,7 +125,7 @@ export default function ToDoScreen() {
 
   return (
     <GestureHandlerRootView className="flex-1">
-      <View className="flex-1 bg-gray-100 p-3">
+      <View className="flex-1 bg-gray-50 p-3">
         {/* <Text className="text-2xl font-bold text-center mb-4 text-orange-600">
           To-Do List
         </Text> */}

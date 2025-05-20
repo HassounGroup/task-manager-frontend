@@ -76,7 +76,7 @@ export default function UserProfileScreen() {
             {/* Back Button */}
             <TouchableOpacity
                 onPress={() => router.back()}
-                className="absolute top-10 left-4 p-0 rounded-full z-10"
+                className="absolute top-6 left-4 p-0 rounded-full z-10"
             >
                 <Ionicons name="arrow-back" size={25} color="white" />
             </TouchableOpacity>

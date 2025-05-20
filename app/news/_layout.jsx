@@ -32,10 +32,10 @@ const PostsFeedScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f8f8f8" }}>
-      <View className="h-12 bg-slate-50 flex items-start justify-center">
+    <View style={{ flex: 1, backgroundColor: "#f3f3f6" }}>
+      <View className="h-12 bg-[#f3f4f6] flex items-start justify-center">
         <TouchableOpacity onPress={() => router.back()} className=" mt-2 ml-3">
-          <Ionicons name="arrow-back" size={30} color="black" />
+          <Ionicons name="arrow-back" size={25} color="black" />
         </TouchableOpacity>
       </View>
       <FlatList
