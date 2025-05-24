@@ -1,24 +1,23 @@
-import { useState, useEffect } from 'react';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
+import { useCreds } from 'creds';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Alert,
   ActivityIndicator,
+  Alert,
+  FlatList,
+  LayoutAnimation,
   Modal,
   Platform,
-  LayoutAnimation,
+  Text,
+  TextInput,
+  TouchableOpacity,
   UIManager,
+  View,
 } from 'react-native';
-import { Ionicons, Entypo } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useAuth } from '../../contexts/authContext';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Picker } from '@react-native-picker/picker';
-import DatePicker from 'react-native-date-picker';
-import { useCreds } from 'creds';
+import { useAuth } from '../../contexts/authContext';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -93,7 +92,7 @@ export default function ManageTasksScreen() {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/tasks`, {
         headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
       });
       const data = await response.json();
@@ -113,7 +112,7 @@ export default function ManageTasksScreen() {
         text: 'Delete',
         onPress: async () => {
           try {
-            const response = await fetch(`${Creds.BackendUrl}/api/tasks/${id}`, {
+            const response = await fetch(`${Creds.BackendUrl}/app-api/tasks/${id}`, {
               method: 'DELETE',
               headers: { Authorization: `Bearer ${userToken}` },
             });
@@ -149,7 +148,7 @@ export default function ManageTasksScreen() {
     };
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks/${editingTask._id}`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/tasks/${editingTask._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userToken}` },
         body: JSON.stringify(updatedTask),
@@ -180,7 +179,7 @@ export default function ManageTasksScreen() {
     console.log(payload);
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks/${taskId}/approve-reject`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/tasks/${taskId}/approve-reject`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

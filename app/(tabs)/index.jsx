@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { Entypo, Feather } from '@expo/vector-icons';
+import { useCreds } from 'creds';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
   LayoutAnimation,
-  UIManager,
   Platform,
   RefreshControl,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  UIManager,
+  View,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import RNPickerSelect from 'react-native-picker-select';
-import { Picker } from '@react-native-picker/picker';
-import { useAuth } from '../../contexts/authContext';
-import { Feather, Entypo } from '@expo/vector-icons';
-import { useCreds } from 'creds';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { useAuth } from '../../contexts/authContext';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental &&
@@ -49,24 +46,35 @@ const MyTasksScreen = () => {
     setRefreshing(false);
   };
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+ useEffect(() => {
+  if (!userProfile || !userProfile._id) {
+    router.replace('/signin');
+    return;
+  }
+  fetchTasks();
+}, [userProfile]);
+
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks/assigned/${userProfile._id}`, {
-        headers: { Authorization: `Bearer ${userToken}` },
-      });
+      const response = await fetch(
+        `${Creds.BackendUrl}/app-api/tasks/assigned/${userProfile._id}`,
+        {
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         setTasks(data);
       } else {
         console.error('Failed to fetch tasks:', data.message);
+        router.replace('/signin');
       }
     } catch (error) {
-      // console.error("Fetch error:", error);
-      router.push('/signin');
+      // console.error('Fetch error:', error);
+      if (error) {
+        router.replace('/signin');
+      }
     }
   };
 
@@ -84,7 +92,7 @@ const MyTasksScreen = () => {
     if (!updatedTasks[taskId]) return toggleEdit(taskId);
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks/${taskId}`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/tasks/${taskId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +113,7 @@ const MyTasksScreen = () => {
 
   const requestTaskApproval = async (taskId) => {
     try {
-      const res = await fetch(`${Creds.BackendUrl}/api/tasks/${taskId}/request-approval`, {
+      const res = await fetch(`${Creds.BackendUrl}/app-api/tasks/${taskId}/request-approval`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +204,7 @@ const MyTasksScreen = () => {
               })}
             </Text>
 
-            <View className="mt-2 mb-2">
+            <View className="mb-2 mt-2">
               <Text className="mb-1 font-semibold text-gray-700">My status:</Text>
 
               {editMode[item._id] ? (

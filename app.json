@@ -11,7 +11,7 @@
       "policy": "appVersion"
     },
     "extra": {
-      "apiUrl": "http://64.227.153.32:8000",
+      "apiUrl": "https://developedbymishab.fun",
       "router": {
         "origin": false
       },
@@ -21,7 +21,7 @@
     },
     "newArchEnabled": true,
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "experiments": {
       "tsconfigPaths": true
@@ -44,10 +44,10 @@
       "expo-audio"
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -57,13 +57,18 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mishab-hassoun.TaskManager",
+      "splash": {
+        "backgroundColor": "#ffffff",
+        "image": "./assets/images/adaptive-icon.png"
+      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
+      "icon": "./assets/images/icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [

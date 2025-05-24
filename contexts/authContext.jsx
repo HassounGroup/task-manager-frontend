@@ -1,9 +1,9 @@
 // authContext.js
 
-import { createContext, useState, useEffect, useContext } from "react";
-import { View, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import { createContext, useContext, useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 // Create the AuthContext
 export const AuthContext = createContext();
@@ -14,6 +14,7 @@ export const useAuth = () => useContext(AuthContext);
 // AuthProvider Component
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [userProfile, setUserProfile] = useState(null);
@@ -22,9 +23,12 @@ export const AuthProvider = ({ children }) => {
     const loadToken = async () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
-        if (token) setUserToken(token);
+        if (token) {
+          setUserToken({token});
+        }
+        setAuthLoading(false);
       } catch (error) {
-        // console.error("Error loading token:", error);
+        console.error("Error loading token:", error);
       } finally {
         setLoading(false);
       }
@@ -64,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ userProfile, userToken, login, logout }}>
+    <AuthContext.Provider value={{ userProfile, userToken, login, logout, authLoading }}>
       {children}
     </AuthContext.Provider>
   );

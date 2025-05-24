@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function AddJobCategoryScreen() {
     const Creds = useCreds();
@@ -16,7 +16,7 @@ export default function AddJobCategoryScreen() {
         }
 
         // Make an API call to save the category in the database
-        fetch(`${Creds.BackendUrl}/api/job-categories`, {
+        fetch(`${Creds.BackendUrl}/app-api/job-categories`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

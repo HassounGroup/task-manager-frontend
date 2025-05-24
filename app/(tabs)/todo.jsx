@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { View, Text, FlatList, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 import axios from "axios";
-import { useAuth } from "../../contexts/authContext";
 import { useCreds } from "creds";
+import { useEffect, useState } from "react";
+import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
+import { useAuth } from "../../contexts/authContext";
 
 export default function ToDoScreen() {
   const Creds = useCreds();
@@ -22,7 +22,7 @@ export default function ToDoScreen() {
   const fetchTodos = async () => {
     try {
       const response = await axios.get(
-        `${Creds.BackendUrl}/api/todos/${userProfile._id}`,
+        `${Creds.BackendUrl}/app-api/todos/${userProfile._id}`,
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
       setTodos(response.data);
@@ -36,7 +36,7 @@ export default function ToDoScreen() {
     if (newTodo.trim() === "") return;
     try {
       const response = await axios.post(
-        `${Creds.BackendUrl}/api/todos`,
+        `${Creds.BackendUrl}/app-api/todos`,
         { title: newTodo, userId: userProfile._id },
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
@@ -52,7 +52,7 @@ export default function ToDoScreen() {
     if (updatedTodo.trim() === "") return;
     try {
       await axios.patch(
-        `${Creds.BackendUrl}/api/todos/${id}`,
+        `${Creds.BackendUrl}/app-api/todos/${id}`,
         { title: updatedTodo },
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
@@ -68,7 +68,7 @@ export default function ToDoScreen() {
   const toggleComplete = async (id, completed) => {
     try {
       await axios.patch(
-        `${Creds.BackendUrl}/api/todos/${id}`,
+        `${Creds.BackendUrl}/app-api/todos/${id}`,
         { completed: !completed },
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
@@ -88,7 +88,7 @@ export default function ToDoScreen() {
         onPress: async () => {
           try {
             const response = await axios.delete(
-              `${Creds.BackendUrl}/api/todos/${id}`,
+              `${Creds.BackendUrl}/app-api/todos/${id}`,
               { headers: { Authorization: `Bearer ${userToken}` } }
             );
             fetchTodos();  // Refresh todos after delete

@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { View, TextInput, Text, TouchableOpacity, Alert } from "react-native";
 import axios from "axios";
-import { useAuth } from "../../contexts/authContext";
 import { useCreds } from "creds";
+import { useEffect, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useAuth } from "../../contexts/authContext";
 
 export default function EditPostScreen({ route, navigation }) {
   const Creds = useCreds();
@@ -18,7 +18,7 @@ export default function EditPostScreen({ route, navigation }) {
   // ✅ Fetch Post Details
   const fetchPostDetails = async () => {
     try {
-      const response = await axios.get(`${Creds.BackendUrl}/api/posts/${postId}`, {
+      const response = await axios.get(`${Creds.BackendUrl}/app-api/posts/${postId}`, {
         headers: { Authorization: `Bearer ${userToken}` },
       });
       const { title, description } = response.data;
@@ -33,7 +33,7 @@ export default function EditPostScreen({ route, navigation }) {
   const handleUpdate = async () => {
     try {
       await axios.patch(
-        `${Creds.BackendUrl}/api/posts/${postId}`,
+        `${Creds.BackendUrl}/app-api/posts/${postId}`,
         { title, description },
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
@@ -53,7 +53,7 @@ export default function EditPostScreen({ route, navigation }) {
         style: "destructive",
         onPress: async () => {
           try {
-            await axios.delete(`${Creds.BackendUrl}/api/posts/${postId}`, {
+            await axios.delete(`${Creds.BackendUrl}/app-api/posts/${postId}`, {
               headers: { Authorization: `Bearer ${userToken}` },
             });
             Alert.alert("Deleted", "Post deleted!");

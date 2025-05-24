@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from "react-native";
-import { AuthContext } from "../../contexts/authContext";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { AuthContext } from "../../contexts/authContext";
 
 export default function ChangePassword() {
   const Creds = useCreds();
@@ -25,7 +25,7 @@ export default function ChangePassword() {
     }
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/users/change-password`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/users/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

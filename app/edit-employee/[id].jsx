@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../../contexts/authContext";
 import { useCreds } from "creds";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useAuth } from "../../contexts/authContext";
 
 export default function EditEmployeeScreen() {
   const Creds = useCreds();
@@ -25,7 +25,7 @@ export default function EditEmployeeScreen() {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await fetch(`${Creds.BackendUrl}/api/users/${id}`, {
+        const response = await fetch(`${Creds.BackendUrl}/app-api/users/${id}`, {
           headers: { Authorization: `Bearer ${userToken}` },
         });
         const data = await response.json();
@@ -57,7 +57,7 @@ export default function EditEmployeeScreen() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/users/update-user/${id}`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/users/update-user/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${userToken}`,

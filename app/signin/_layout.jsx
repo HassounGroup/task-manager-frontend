@@ -1,8 +1,8 @@
-import { useState, useContext } from "react";
-import { View, TextInput, TouchableOpacity, Text, Alert, Image } from "react-native";
-import { AuthContext } from "../../contexts/authContext";
-import { useRouter } from "expo-router";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { AuthContext } from "../../contexts/authContext";
 
 export default function SignIn() {
   const Creds = useCreds();
@@ -17,7 +17,7 @@ export default function SignIn() {
       return;
     }
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/users/login`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -41,9 +41,9 @@ export default function SignIn() {
       
       {/* Logo */}
       <Image
-        source={require("../../assets/icon.png")}
-        width={24}
-        height={24}
+        source={require("../../assets/images/icon.png")}
+        width={30}
+        height={30}
         className="w-24 h-24 self-center mb-5 rounded-full"
       /> 
 

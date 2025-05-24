@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { View, Text, FlatList, TextInput, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useAuth } from "../../contexts/authContext";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useAuth } from "../../contexts/authContext";
 
 export default function ManageEmployeesScreen() {
   const Creds = useCreds();
@@ -24,7 +24,7 @@ export default function ManageEmployeesScreen() {
     const fetchData = async () => {
       try {
         console.log("🚀 Fetching Employees...");
-        const response = await fetch(`${Creds.BackendUrl}/api/users`, {
+        const response = await fetch(`${Creds.BackendUrl}/app-api/users`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
             "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export default function ManageEmployeesScreen() {
         text: "Delete",
         onPress: async () => {
           try {
-            const response = await fetch(`${Creds.BackendUrl}/api/users/delete-user/${id}`, {
+            const response = await fetch(`${Creds.BackendUrl}/app-api/users/delete-user/${id}`, {
               method: "DELETE",
               headers: { Authorization: `Bearer ${userToken}` },
             });

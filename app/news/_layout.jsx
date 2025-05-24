@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
-import { View, FlatList, TouchableOpacity, Text } from "react-native";
-import axios from "axios";
-import { useRouter } from "expo-router";
-import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import PostCard from "../../components/PostCard";
 import { AuthContext } from "../../contexts/authContext"; // Make sure this provides user info
-import { useCreds } from "creds";
 
 const PostsFeedScreen = ({ navigation }) => {
   const Creds = useCreds();
@@ -16,7 +16,7 @@ const PostsFeedScreen = ({ navigation }) => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(`${Creds.BackendUrl}/api/posts`);
+      const res = await axios.get(`${Creds.BackendUrl}/app-api/posts`);
       setPosts(res.data);
     } catch (error) {
       console.error("Error fetching posts:", error);

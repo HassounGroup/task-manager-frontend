@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    FlatList,
     Dimensions,
-    Modal,
-    TextInput,
+    FlatList,
+    Image,
     KeyboardAvoidingView,
+    Modal,
     Platform,
     ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
     TouchableWithoutFeedback,
+    View,
 } from "react-native";
 // import Video from "react-native-video";
-import { Video } from 'expo-av';
-import Icon from "react-native-vector-icons/Ionicons";
-import axios from "axios";
 import { Ionicons } from '@expo/vector-icons';
+import axios from "axios";
+import { Video } from 'expo-video';
+import Icon from "react-native-vector-icons/Ionicons";
 import { useCreds } from "../creds";
 
 const screenWidth = Dimensions.get("window").width;
@@ -81,7 +81,7 @@ const PostCard = ({ post, currentUserId, userRole, onPostDeleted }) => {
             setLikesCount((prev) => newLiked ? prev + 1 : prev - 1);
 
             // Send to backend
-            const res = await axios.patch(`${Creds.BackendUrl}/api/posts/like/${post._id}`, {
+            const res = await axios.patch(`${Creds.BackendUrl}/app-api/posts/like/${post._id}`, {
                 userId: currentUserId,
             });
 
@@ -96,7 +96,7 @@ const PostCard = ({ post, currentUserId, userRole, onPostDeleted }) => {
 
     const handleDeletePost = async () => {
         try {
-            await axios.delete(`${Creds.BackendUrl}/api/posts/${post._id}`);
+            await axios.delete(`${Creds.BackendUrl}/app-api/posts/${post._id}`);
             onPostDeleted()
             console.log("Post deleted successfully");
         } catch (error) {
@@ -151,7 +151,7 @@ const PostCard = ({ post, currentUserId, userRole, onPostDeleted }) => {
         if (!newComment.trim()) return;
         try {
             const res = await axios.post(
-                `${Creds.BackendUrl}/api/posts/comment/${post._id}`,
+                `${Creds.BackendUrl}/app-api/posts/comment/${post._id}`,
                 {
                     userId: currentUserId,
                     comment: newComment,

@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { View, TextInput, TouchableOpacity, Text, Alert, Image } from "react-native";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function ResetPassword() {
     const Creds = useCreds();
@@ -22,7 +22,7 @@ export default function ResetPassword() {
 
         try {
             setLoading(true);
-            const response = await fetch(`${Creds.BackendUrl}/api/users/check-username/${typedUsername}`);
+            const response = await fetch(`${Creds.BackendUrl}/app-api/users/check-username/${typedUsername}`);
             const data = await response.json();
 
             if (response.ok && data.exists) {
@@ -74,7 +74,7 @@ export default function ResetPassword() {
 
         try {
             const new_password = await generatePassword();
-            const response = await fetch(`${Creds.BackendUrl}/api/reset-password`, {
+            const response = await fetch(`${Creds.BackendUrl}/app-api/reset-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, to_email: email, new_password }),
@@ -98,8 +98,8 @@ export default function ResetPassword() {
 
     return (
         <View className="flex-1 justify-center px-5 bg-gray-100">
-            <TouchableOpacity onPress={() => router.back()} className="absolute top-8 left-2 p-5">
-                <Ionicons name="arrow-back" size={24} color="black" />
+            <TouchableOpacity onPress={() => router.back()} className="absolute top-3 left-2 p-5">
+                <Ionicons name="arrow-back" size={25} color="black" />
             </TouchableOpacity>
 
             <Text className="text-3xl font-bold mb-5 text-center">Reset Password</Text>

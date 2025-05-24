@@ -1,39 +1,39 @@
-import { useEffect, useState, useContext } from "react";
-import { Tabs, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, ActivityIndicator, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { AuthContext } from "../../contexts/authContext";
-import { useCreds } from "creds";
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCreds } from 'creds';
+import { Tabs, useRouter } from 'expo-router';
+import { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AuthContext } from '../../contexts/authContext';
 
 export default function TabLayout() {
   const Creds = useCreds();
-  const [userToken, setUserToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { userProfile } = useContext(AuthContext);
 
-  // Check if user is authenticated
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = await AsyncStorage.getItem("userToken");
-        if (userProfile) {
-          // setUserToken(token);
-        } else {
-          router.replace("/signin"); // Redirect to login if no token
+        const token = await AsyncStorage.getItem('userToken');
+        if (!token || !userProfile?.username) {
+          // Defer to next frame to ensure navigation is ready
+          requestAnimationFrame(() => {
+            router.replace('/signin');
+          });
         }
       } catch (error) {
-        // console.error("Error checking auth:", error);
-        router.replace("/signin"); // On error, redirect to login
+        requestAnimationFrame(() => {
+          router.replace('/signin');
+        });
       } finally {
         setIsLoading(false);
       }
     };
-    checkAuth();
-  }, []);
 
-  // Show loading spinner while checking auth
+    checkAuth();
+  }, [userProfile]);
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -42,33 +42,24 @@ export default function TabLayout() {
     );
   }
 
-  // Render top bar with logo and user details
   const renderHeader = () => (
-    <View className="flex-row justify-between items-center px-4 py-4 bg-[#f3f4f6] drop-shadow-md border-b-[.3px] border-gray-300">
-      <TouchableOpacity
-        onPress={() => router.push("/news")}
-      >
-        <Ionicons name="notifications" size={24} color={"#e6560e"} />
+    <View className="flex-row items-center justify-between border-b-[.3px] border-gray-300 bg-[#f3f4f6] px-4 py-4 drop-shadow-md">
+      <TouchableOpacity onPress={() => router.push('/news')}>
+        <Ionicons name="notifications" size={24} color={'#e6560e'} />
       </TouchableOpacity>
 
-      {/* <Image
-        source={require("../../assets/Hassoun.png")} // Replace with your logo path
-        style={styles.logo}
-      /> */}
       <View className="flex-row items-center">
-        <Text className="text-black font-bold text-xl">{userProfile?.username || "User"}</Text>
-        <TouchableOpacity
-          onPress={() => router.push("/settings")}
-        >
+        <Text className="text-xl font-bold text-black">{userProfile?.username || 'User'}</Text>
+        <TouchableOpacity onPress={() => router.push('/settings')}>
           {userProfile?.profilePic ? (
             <Image
               source={{ uri: `${Creds.BackendUrl}${userProfile?.profilePic}` }}
-              className="w-10 h-10 rounded-full ml-3 border border-orange-600"
+              className="ml-3 h-10 w-10 rounded-full border border-orange-600"
             />
           ) : (
-            <View className="w-10 h-10 rounded-full bg-orange-600 justify-center content-center ml-2">
-              <Text className="text-white font-bold text-center text-2xl">
-                {userProfile?.username?.[0].toUpperCase()}
+            <View className="ml-2 h-10 w-10 content-center justify-center rounded-full bg-orange-600">
+              <Text className="text-center text-2xl font-bold text-white">
+                {userProfile?.username?.[0]?.toUpperCase()}
               </Text>
             </View>
           )}
@@ -81,18 +72,15 @@ export default function TabLayout() {
     <>
       {renderHeader()}
       <Tabs
-        // initialRouteName="tasks"
         screenOptions={{
-          tabBarActiveTintColor: "#e6560e",
-          tabBarStyle: { backgroundColor: "#f3f4f6", height: 60 },
+          tabBarActiveTintColor: '#e6560e',
+          tabBarStyle: { backgroundColor: '#f3f4f6', height: 60, shadowColor: '#f3f4f6' },
           headerShown: false,
-
-        }}
-      >
+        }}>
         <Tabs.Screen
           name="index"
           options={{
-            title: "My Tasks",
+            title: 'My Tasks',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="list-outline" size={size} color={color} />
             ),
@@ -101,7 +89,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="todo"
           options={{
-            title: "To-Do",
+            title: 'To-Do',
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="checkbox-outline" size={size} color={color} />
             ),
@@ -112,16 +100,15 @@ export default function TabLayout() {
   );
 }
 
-// Styles for the component
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
     width: 120,
     height: 40,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
 });

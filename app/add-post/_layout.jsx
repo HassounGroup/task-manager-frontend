@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { View, TextInput, Text, TouchableOpacity, Image, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { useAuth } from "../../contexts/authContext";
-import { ProgressBar } from 'react-native-paper'; // Importing ProgressBar from react-native-paper
-import { useRouter } from "expo-router";
 import { useCreds } from "creds";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ProgressBar } from 'react-native-paper'; // Importing ProgressBar from react-native-paper
+import { useAuth } from "../../contexts/authContext";
 
 export default function CreatePostScreen({ navigation }) {
     const Creds = useCreds();
@@ -53,7 +53,7 @@ export default function CreatePostScreen({ navigation }) {
 
         try {
             setIsUploading(true);
-            const response = await axios.post(`${Creds.BackendUrl}/api/posts`, formData, {
+            const response = await axios.post(`${Creds.BackendUrl}/app-api/posts`, formData, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                     "Content-Type": "multipart/form-data",

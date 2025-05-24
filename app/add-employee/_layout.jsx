@@ -1,20 +1,20 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 import { useCreds } from 'creds';
 import { useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Modal,
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { Picker } from '@react-native-picker/picker';
 import { AuthContext } from '../../contexts/authContext';
 
 export default function AddEmployeeScreen() {
@@ -41,7 +41,7 @@ export default function AddEmployeeScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const jobCategoryResponse = await fetch(`${Creds.BackendUrl}/api/job-categories`, {
+        const jobCategoryResponse = await fetch(`${Creds.BackendUrl}/app-api/job-categories`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -50,7 +50,7 @@ export default function AddEmployeeScreen() {
         const jobCategoryData = await jobCategoryResponse.json();
         setJobCategories(jobCategoryData);
 
-        const locationResponse = await fetch(`${Creds.BackendUrl}/api/locations`, {
+        const locationResponse = await fetch(`${Creds.BackendUrl}/app-api/locations`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -88,7 +88,7 @@ export default function AddEmployeeScreen() {
     }
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/users`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

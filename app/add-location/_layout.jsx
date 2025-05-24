@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { useCreds } from "creds";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function AddLocationScreen() {
     const Creds = useCreds();
@@ -16,7 +16,7 @@ export default function AddLocationScreen() {
         }
 
         // Make an API call to save the category in the database
-        fetch(`${Creds.BackendUrl}/api/locations`, {
+        fetch(`${Creds.BackendUrl}/app-api/locations`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

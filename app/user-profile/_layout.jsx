@@ -1,11 +1,11 @@
-import { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { AuthContext } from "../../contexts/authContext";
-import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { useCreds } from "creds";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { AuthContext } from "../../contexts/authContext";
 
 export default function UserProfileScreen() {
     const Creds = useCreds();
@@ -57,7 +57,7 @@ export default function UserProfileScreen() {
 
         try {
             const response = await axios.post(
-                `${Creds.BackendUrl}/api/profile/upload/${userProfile._id}`,
+                `${Creds.BackendUrl}/app-api/profile/upload/${userProfile._id}`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
@@ -126,7 +126,7 @@ export default function UserProfileScreen() {
                 ].map((item, index) => (
                     <View
                         key={index}
-                        className="bg-white py-2 px-4 rounded-lg mb-2 shadow h-16"
+                        className="bg-white py-2 px-4 rounded-lg mb-2 h-16"
                     >
                         <Text className="text-gray-500 text-sm">{item.label}</Text>
                         <Text className="text-lg font-semibold text-gray-800">{item.value || "Not specified"}</Text>
@@ -136,7 +136,7 @@ export default function UserProfileScreen() {
 
             {/* Change Password Button */}
             <TouchableOpacity
-                className="bg-white p-4 rounded-lg shadow flex-row justify-between items-center mx-3 min-h-16"
+                className="bg-white p-4 rounded-lg flex-row justify-between items-center mx-3 min-h-16"
                 onPress={() => router.push("/change-password")}
             >
                 <Text className="text-lg font-semibold text-gray-800">Change Password</Text>

@@ -19,6 +19,7 @@
     "@expo/prebuild-config": "~9.0.0",
     "@expo/vector-icons": "^14.0.4",
     "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-community/datetimepicker": "8.3.0",
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
@@ -27,9 +28,9 @@
     "babel-preset-expo": "~13.0.0",
     "eas-cli": "^16.3.0",
     "expo": "^53.0.0",
-    "expo-audio": "~0.4.5",
-    "expo-av": "~15.1.4",
+    "expo-audio": "^0.4.5",
     "expo-constants": "~17.1.6",
+    "expo-dev-client": "~5.1.8",
     "expo-doctor": "^1.12.8",
     "expo-image": "~2.1.7",
     "expo-image-manipulator": "~13.1.7",
@@ -58,8 +59,7 @@
     "react-native-select-dropdown": "^4.0.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-video": "^6.11.0",
-    "react-native-web": "^0.20.0",
-    "expo-dev-client": "~5.1.8"
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

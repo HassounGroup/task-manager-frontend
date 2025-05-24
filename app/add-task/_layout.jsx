@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
+import { useCreds } from 'creds';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
-  View,
+  Alert,
+  Modal,
+  Platform,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  Alert,
-  Platform,
-  Modal,
+  View,
 } from 'react-native';
-import { Ionicons, Feather } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
-import RNPickerSelect from 'react-native-picker-select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import RNPickerSelect from 'react-native-picker-select';
 import { useAuth } from '../../contexts/authContext';
-import { useCreds } from 'creds';
 
 const AddTaskScreen = () => {
   const Creds = useCreds();
@@ -35,7 +35,7 @@ const AddTaskScreen = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch(`${Creds.BackendUrl}/api/users`, {
+        const response = await fetch(`${Creds.BackendUrl}/app-api/users`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
             'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const AddTaskScreen = () => {
     console.log(deadline);
 
     try {
-      const response = await fetch(`${Creds.BackendUrl}/api/tasks`, {
+      const response = await fetch(`${Creds.BackendUrl}/app-api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,6 +202,7 @@ const AddTaskScreen = () => {
             {deadline.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
           </Text>
         </TouchableOpacity>
+        
 
         <DateTimePickerModal
           className="mb-5"
